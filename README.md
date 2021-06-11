@@ -1,3 +1,8 @@
+Forked from https://github.com/esperknight/CriPakTools.git.
+Change handler condition to cater for encrypted chunks where magic "CRILAYLA" is erased.
+
+-----------
+
 CriPakTools
 ===========
 
