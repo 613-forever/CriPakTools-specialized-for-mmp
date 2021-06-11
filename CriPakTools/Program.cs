@@ -59,12 +59,14 @@ namespace CriPakTools
                     }
 
                     oldFile.BaseStream.Seek((long)entries[i].FileOffset, SeekOrigin.Begin);
-                    string isComp = Encoding.ASCII.GetString(oldFile.ReadBytes(8));
+                    string isComp = Encoding.ASCII.GetString(oldFile.ReadBytes(16));
                     oldFile.BaseStream.Seek((long)entries[i].FileOffset, SeekOrigin.Begin);
 
                     byte[] chunk = oldFile.ReadBytes(Int32.Parse(entries[i].FileSize.ToString()));
-                    if (isComp == "CRILAYLA")
+                    string filename = entries[i].FileName.ToString();
+                    if (isComp.StartsWith("CRILAYLA") || (!(filename.EndsWith(".dat") || filename.EndsWith(".cbi")) && isComp != "\0\0\0\0\0\0\0\0\0\0(c)CRI" && isComp.StartsWith("\0\0\0\0\0\0\0\0")))
                     {
+                        Console.WriteLine("Decompressing: " + ((entries[i].DirName != null) ? entries[i].DirName + "/" : "") + entries[i].FileName.ToString());
                         int size = Int32.Parse((entries[i].ExtractSize ?? entries[i].FileSize).ToString());
                         chunk = cpk.DecompressCRILAYLA(chunk, size);
                     }
